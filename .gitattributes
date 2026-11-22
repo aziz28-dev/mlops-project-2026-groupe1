@@ -1,0 +1,9 @@
+# Fins de ligne normalisées en LF (Windows en local, Linux en CI)
+* text=auto eol=lf
+
+# Fichiers binaires : jamais convertis
+*.pdf binary
+*.png binary
+*.zip binary
+*.parquet binary
+*.joblib binary

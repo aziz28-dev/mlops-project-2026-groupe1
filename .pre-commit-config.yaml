@@ -1,7 +1,10 @@
 # Lancer `poetry run pre-commit autoupdate` après installation pour récupérer les dernières versions.
+# Documents officiels de l'enseignant : jamais modifiés par les hooks.
+exclude: ^docs/reference/
+
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v5.0.0
+    rev: v6.0.0
     hooks:
       - id: trailing-whitespace
       - id: end-of-file-fixer
@@ -11,12 +14,12 @@ repos:
       - id: check-merge-conflict
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.8.0
+    rev: v0.17.6
     hooks:
-      - id: ruff
+      - id: ruff-check
         args: [--fix]
 
   - repo: https://github.com/psf/black
-    rev: 24.10.0
+    rev: 26.10.1
     hooks:
       - id: black
