@@ -11,14 +11,39 @@ souscription (`y` = yes/no) afin d'appeler en priorité les clients les plus pro
 - **Dataset :** [UCI Bank Marketing](https://archive.ics.uci.edu/dataset/222/bank+marketing) —
   `bank-additional-full.csv`, 41 188 lignes, 20 variables, licence CC BY 4.0.
 - **Tâche :** classification binaire déséquilibrée (métriques : PR-AUC, F1, ROC-AUC, recall).
-- **Variable exclue :** `duration` (fuite de données — justification détaillée en phase 1).
+- **Variable exclue :** `duration` (fuite de données, voir ci-dessous).
+
+## Données
+
+Source officielle : `bank-additional-names.txt`, fourni dans le zip UCI et versionné avec DVC dans
+`data/raw/`.
+
+- **Ordre chronologique.** Le fichier contient « *all examples, ordered by date (from May 2008 to
+  November 2010)* ». On ne mélange donc pas les lignes avant le split : les premières servent de
+  référence, les dernières jouent la « production ».
+- **`duration` est exclue.** Note officielle : « *the duration is not known before a call is performed.
+  Also, after the end of the call y is obviously known. Thus, this input should only be included for
+  benchmark purposes and should be discarded if the intention is to have a realistic predictive
+  model.* »
+- **Valeurs manquantes.** Elles sont codées `"unknown"` dans les catégorielles ; le traitement retenu
+  sera documenté en phase 3. `pdays = 999` signifie « jamais contacté auparavant ».
+- **Validation** (`reports/validation.json`) : 41 188 lignes, 21 colonnes, 11,27 % de `y = "yes"`.
+
+## Pipeline de données (DVC)
+
+```bash
+poetry run dvc repro     # ingest (téléchargement UCI) -> validate (schéma)
+poetry run dvc dag       # affiche le DAG
+poetry run dvc pull      # récupère les données depuis le remote (remote partagé : décision D1)
+```
 
 ## Statut
 
 | Brique | État |
 |---|---|
 | Environnement (Poetry, pre-commit, structure `src/`) | ✅ phase 0 |
-| DVC, MLflow, API, Docker, CI, Prefect, drift | ⏳ prévu — voir [docs/PROGRESS.md](docs/PROGRESS.md) |
+| DVC : ingestion + validation, remote local | ✅ phase 1 (remote partagé : décision D1 en attente) |
+| MLflow, API, Docker, CI, Prefect, drift | ⏳ prévu — voir [docs/PROGRESS.md](docs/PROGRESS.md) |
 
 ## Installation
 
