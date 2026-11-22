@@ -1,0 +1,25 @@
+stages:
+  ingest:
+    cmd: python -m bankmlops.data.ingest
+    deps:
+      - src/bankmlops/data/ingest.py
+    params:
+      - data.source_url
+      - data.raw_dir
+    outs:
+      - data/raw/bank-additional-full.csv
+      - data/raw/bank-additional-names.txt
+
+  validate:
+    cmd: python -m bankmlops.data.validate
+    deps:
+      - src/bankmlops/data/validate.py
+      - data/raw/bank-additional-full.csv
+    params:
+      - data.raw_csv
+      - data.separator
+      - data.target
+      - data.expected_rows
+    metrics:
+      - reports/validation.json:
+          cache: false

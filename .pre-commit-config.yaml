@@ -7,6 +7,7 @@ repos:
     rev: v6.0.0
     hooks:
       - id: trailing-whitespace
+        exclude: ^dvc\.lock$     # généré par DVC, qui y laisse des espaces en fin de ligne
       - id: end-of-file-fixer
       - id: check-yaml
       - id: check-added-large-files

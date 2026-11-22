@@ -1,0 +1,45 @@
+schema: '2.0'
+stages:
+  ingest:
+    cmd: python -m bankmlops.data.ingest
+    deps:
+    - path: src/bankmlops/data/ingest.py
+      hash: md5
+      md5: bce93a77c81bfc0c8c6fff5658ec4500
+      size: 2676
+    params:
+      params.yaml:
+        data.raw_dir: data/raw
+        data.source_url:
+          https://archive.ics.uci.edu/static/public/222/bank+marketing.zip
+    outs:
+    - path: data/raw/bank-additional-full.csv
+      hash: md5
+      md5: f6cb2c1256ffe2836b36df321f46e92c
+      size: 5834924
+    - path: data/raw/bank-additional-names.txt
+      hash: md5
+      md5: aec0451bc97d21b70e7acf88eb22448d
+      size: 5458
+  validate:
+    cmd: python -m bankmlops.data.validate
+    deps:
+    - path: data/raw/bank-additional-full.csv
+      hash: md5
+      md5: f6cb2c1256ffe2836b36df321f46e92c
+      size: 5834924
+    - path: src/bankmlops/data/validate.py
+      hash: md5
+      md5: 8bf00182e8b7f507636f2d4d37e5f2f4
+      size: 3924
+    params:
+      params.yaml:
+        data.expected_rows: 41188
+        data.raw_csv: data/raw/bank-additional-full.csv
+        data.separator: ;
+        data.target: y
+    outs:
+    - path: reports/validation.json
+      hash: md5
+      md5: 910217adc17353b5d7ea99cdc3c8ab85
+      size: 73

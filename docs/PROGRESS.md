@@ -33,8 +33,8 @@ Pour la séance : phase 3 = « partielle (préparation minimale dans la baseline
 |---|---|---|---|---|---|
 | — | Formulaire groupe soumis | A + B | Non commencé | — | Un seul envoi par groupe |
 | — | SYNOPSIS.md complété (noms, emails) | A + B | En cours | SYNOPSIS.md | Compléter les noms, pousser sur GitHub |
-| 0 | Dépôt + environnement + pre-commit | A | En attente de validation | `poetry install` OK (Python 3.11.9) · ruff + black OK · `pytest` 7 passed, couverture 100 % · `main` poussé sur GitHub | A : committer sur `feature/setup`, `pre-commit run --all-files` après `git add`, push + PR vers `main` |
-| 1 | Ingestion + validation + DVC | A | Non commencé | — | Dim. 22/11 soir, après la phase 0 |
+| 0 | Dépôt + environnement + pre-commit | A | Terminé | `poetry install` OK (Python 3.11.9) · `pre-commit run --all-files` tous hooks Passed · `pytest` 7 passed · PR #1 mergée (merge commit `9624335`, 22/11) | — |
+| 1 | Ingestion + validation + DVC | A | En attente de validation | DVC 3.67.1 · `dvc repro` OK (41 188 lignes, 21 colonnes, 11,27 % de yes) · 2e `dvc repro` = stages sautés · `dvc status` « up to date » · `dvc push` : 2 fichiers vers remote local · 18 tests, couverture 84 % · ordre chronologique et note `duration` confirmés dans `bank-additional-names.txt` | A : commits + PR ; A + B : trancher D1 |
 | 2 | EDA (version courte : 2 figures) | A | Non commencé | — | Lun. 23/11 soir |
 | 3 | Préparation + split temporel | A | Non commencé | — | Minimal dans la phase 4 baseline ; version complète après le 24/11 |
 | 4 | Entraînement + MLflow (baseline LogReg + RF) | A | Non commencé | — | Lun. 23/11 soir ; XGBoost après le 24/11 |
@@ -49,7 +49,7 @@ Pour la séance : phase 3 = « partielle (préparation minimale dans la baseline
 ## Décisions
 | ID | Sujet | Décision | Date |
 |---|---|---|---|
-| D1 | Remote DVC accessible en CI | À trancher | — |
+| D1 | Remote DVC accessible en CI | À trancher. Provisoire : remote local `C:\Users\Aziz\dvc-storage`, déclaré dans `.dvc/config.local` (non versionné) | 22/11 |
 | D2 | MLflow stages vs aliases | Aliases proposés (à confirmer) | — |
 | D3 | Chargement du modèle par l'API | Artefact exporté proposé (à confirmer) | — |
 | D4 | Python 3.11 vs versions récentes | Rester en 3.11 : les dernières versions de numpy (2.5), scipy (1.18) et xgboost (≥ 3.3) exigent Python ≥ 3.12 → bornes `numpy<2.5`, `xgboost<3.3` dans `pyproject.toml` | 22/11 |
