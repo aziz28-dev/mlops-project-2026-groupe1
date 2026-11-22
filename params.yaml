@@ -4,7 +4,10 @@
 seed: 42
 
 data:
+  source_url: https://archive.ics.uci.edu/static/public/222/bank+marketing.zip
+  raw_dir: data/raw
   raw_csv: data/raw/bank-additional-full.csv
+  expected_rows: 41188            # bank-additional-names.txt, section 5
   separator: ";"
   target: y
   positive_label: "yes"
