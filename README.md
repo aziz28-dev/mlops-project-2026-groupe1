@@ -50,8 +50,8 @@ poetry run dvc pull      # récupère les données depuis le remote (remote part
 Prérequis : Python 3.11, [Poetry](https://python-poetry.org/) ≥ 2.0, Git.
 
 ```bash
-git clone https://github.com/aziz28-dev/mlops-project-2026-groupe1.git
-cd mlops-project-2026-groupe1
+git clone https://github.com/aziz28-dev/mlops-project-2026-groupeB.git
+cd mlops-project-2026-groupeB
 poetry install                    # crée .venv et installe les dépendances
 poetry run pre-commit install     # active ruff + black à chaque commit
 poetry run pytest                 # lance les tests

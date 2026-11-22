@@ -12,7 +12,7 @@ Il décrit le projet, le périmètre, les conventions et la manière dont Claude
 > `data/validate.py`, `dvc.yaml` (stages `ingest` → `validate`). DVC est en dépendance **dev** (pas dans
 > l'image Docker). Remote DVC provisoire = local, dans `.dvc/config.local` (non versionné) en attendant D1.
 > Les tests n'utilisent ni réseau ni vrai dataset (fixtures de `tests/conftest.py`). **Pas encore de
-> préparation, de modèle ni de MLflow.** Ordre chronologique et note `duration` confirmés (README). Dépôt GitHub : `aziz28-dev/mlops-project-2026-groupe1` (numéro « 1 » provisoire, pas confirmé par le prof). La section 5 décrit la
+> préparation, de modèle ni de MLflow.** Ordre chronologique et note `duration` confirmés (README). Dépôt GitHub : `aziz28-dev/mlops-project-2026-groupeB` (renommé le 22/11, ancien nom `...-groupe1`). La section 5 décrit la
 > structure *cible* ; ne pas supposer qu'un fichier existe sans le vérifier. Avancement réel : `docs/PROGRESS.md`.
 >
 > Poetry n'est pas forcément dans le PATH des terminaux déjà ouverts : sinon utiliser
