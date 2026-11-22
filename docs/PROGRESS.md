@@ -34,7 +34,7 @@ Pour la séance : phase 3 = « partielle (préparation minimale dans la baseline
 | — | Formulaire groupe soumis | A + B | Non commencé | — | Un seul envoi par groupe |
 | — | SYNOPSIS.md complété (noms, emails) | A + B | En cours | SYNOPSIS.md | Compléter les noms, pousser sur GitHub |
 | 0 | Dépôt + environnement + pre-commit | A | Terminé | `poetry install` OK (Python 3.11.9) · `pre-commit run --all-files` tous hooks Passed · `pytest` 7 passed · PR #1 mergée (merge commit `9624335`, 22/11) | — |
-| 1 | Ingestion + validation + DVC | A | En attente de validation | DVC 3.67.1 · `dvc repro` OK (41 188 lignes, 21 colonnes, 11,27 % de yes) · 2e `dvc repro` = stages sautés · `dvc status` « up to date » · `dvc push` : 2 fichiers vers remote local · 18 tests, couverture 84 % · ordre chronologique et note `duration` confirmés dans `bank-additional-names.txt` | A : commits + PR ; A + B : trancher D1 |
+| 1 | Ingestion + validation + DVC | A | Terminé (PR #2, merge commit `52c7de3`, 22/11) | DVC 3.67.1 · `dvc repro` OK (41 188 lignes, 21 colonnes, 11,27 % de yes) · 2e `dvc repro` = stages sautés · `dvc status` « up to date » · `dvc push` : 2 fichiers vers remote local · 18 tests, couverture 84 % · ordre chronologique et note `duration` confirmés dans `bank-additional-names.txt` | A + B : trancher D1 (nécessaire avant la phase 8 / CML) |
 | 2 | EDA (version courte : 2 figures) | A | Non commencé | — | Lun. 23/11 soir |
 | 3 | Préparation + split temporel | A | Non commencé | — | Minimal dans la phase 4 baseline ; version complète après le 24/11 |
 | 4 | Entraînement + MLflow (baseline LogReg + RF) | A | Non commencé | — | Lun. 23/11 soir ; XGBoost après le 24/11 |
@@ -55,6 +55,6 @@ Pour la séance : phase 3 = « partielle (préparation minimale dans la baseline
 | D4 | Python 3.11 vs versions récentes | Rester en 3.11 : les dernières versions de numpy (2.5), scipy (1.18) et xgboost (≥ 3.3) exigent Python ≥ 3.12 → bornes `numpy<2.5`, `xgboost<3.3` dans `pyproject.toml` | 22/11 |
 
 ## Questions pour l'enseignant
-- Quel est notre numéro de groupe (pour nommer le dépôt `mlops-project-2026-groupeX`) ? En attendant, le dépôt s'appelle `aziz28-dev/mlops-project-2026-groupe1` : **« 1 » est provisoire, choisi par nous**. Au besoin, renommer le dépôt et mettre à jour `git remote`, `README.md` et `SYNOPSIS.md`.
+- ~~Numéro de groupe~~ → dépôt renommé `aziz28-dev/mlops-project-2026-groupeB` le 22/11 (ancien nom : `...-groupe1`). README, SYNOPSIS, CLAUDE.md et `git remote` mis à jour.
 - Format de la soutenance finale : avec slides (guide) ou sans slides (mail 1) ?
 - Les aliases MLflow (`@champion`) sont-ils acceptés à la place des stages Staging/Production ?

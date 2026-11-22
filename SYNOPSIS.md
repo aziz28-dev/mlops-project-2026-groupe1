@@ -11,7 +11,7 @@
 * **Membres de l'équipe :**
   1. **Étudiant 1 (Lead Data, DVC, Modeling & MLflow, Drift) :** NOM Prénom — Email : `...`
   2. **Étudiant 2 (Lead Serving, CI/CD, CML & Prefect) :** NOM Prénom — Email : `...`
-* **Lien vers le Dépôt GitHub :** `https://github.com/<compte>/mlops-project-2026-groupeX`
+* **Lien vers le Dépôt GitHub :** `https://github.com/aziz28-dev/mlops-project-2026-groupeB`
 
 ---
 
