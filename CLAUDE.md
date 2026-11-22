@@ -7,11 +7,14 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 Ce fichier est lu automatiquement par Claude Code au démarrage de chaque session.
 Il décrit le projet, le périmètre, les conventions et la manière dont Claude doit travailler avec nous.
 
-> **État du dépôt (à mettre à jour au fil des phases) :** pour l'instant le dossier ne contient que le kit
-> de démarrage : `params.yaml`, `.pre-commit-config.yaml`, `.gitignore`, `docs/`, `.claude/commands/`,
-> des dossiers `data/ models/ reports/` vides (`.gitkeep`). **Pas encore de `pyproject.toml`, pas de `src/`,
-> pas de `dvc.yaml`, et le dossier n'est pas encore un dépôt Git.** La section 5 décrit la structure *cible* ;
-> ne pas supposer qu'un fichier existe sans le vérifier. Avancement réel : `docs/PROGRESS.md`.
+> **État du dépôt (à mettre à jour au fil des phases) :** phase 0 faite — Poetry 2.x (`.venv` dans le
+> projet via `poetry.toml`), squelette `src/bankmlops/` avec seulement `config.py` implémenté,
+> `tests/unit/test_config.py`, pre-commit (ruff-check + black). **Pas encore de `dvc.yaml`, de données,
+> ni de modules métier.** Dépôt GitHub : `aziz28-dev/mlops-project-2026-groupe1` (numéro « 1 » provisoire, pas confirmé par le prof). La section 5 décrit la
+> structure *cible* ; ne pas supposer qu'un fichier existe sans le vérifier. Avancement réel : `docs/PROGRESS.md`.
+>
+> Poetry n'est pas forcément dans le PATH des terminaux déjà ouverts : sinon utiliser
+> `$env:APPDATA\Python\Scripts\poetry.exe`. Python 3.11 impose `numpy<2.5` et `xgboost<3.3` (décision D4).
 
 ---
 
