@@ -33,7 +33,7 @@ Pour la séance : phase 3 = « partielle (préparation minimale dans la baseline
 |---|---|---|---|---|---|
 | — | Formulaire groupe soumis | A + B | Non commencé | — | Un seul envoi par groupe |
 | — | SYNOPSIS.md complété (noms, emails) | A + B | En cours | SYNOPSIS.md | Compléter les noms, pousser sur GitHub |
-| 0 | Dépôt + environnement + pre-commit | A | En cours | Résumé du projet validé (pas encore de fichier produit) | Installer Poetry, choisir l'option Git, puis exécuter la phase 0 |
+| 0 | Dépôt + environnement + pre-commit | A | En attente de validation | `poetry install` OK (Python 3.11.9) · ruff + black OK · `pytest` 7 passed, couverture 100 % · `main` poussé sur GitHub | A : committer sur `feature/setup`, `pre-commit run --all-files` après `git add`, push + PR vers `main` |
 | 1 | Ingestion + validation + DVC | A | Non commencé | — | Dim. 22/11 soir, après la phase 0 |
 | 2 | EDA (version courte : 2 figures) | A | Non commencé | — | Lun. 23/11 soir |
 | 3 | Préparation + split temporel | A | Non commencé | — | Minimal dans la phase 4 baseline ; version complète après le 24/11 |
@@ -52,7 +52,9 @@ Pour la séance : phase 3 = « partielle (préparation minimale dans la baseline
 | D1 | Remote DVC accessible en CI | À trancher | — |
 | D2 | MLflow stages vs aliases | Aliases proposés (à confirmer) | — |
 | D3 | Chargement du modèle par l'API | Artefact exporté proposé (à confirmer) | — |
+| D4 | Python 3.11 vs versions récentes | Rester en 3.11 : les dernières versions de numpy (2.5), scipy (1.18) et xgboost (≥ 3.3) exigent Python ≥ 3.12 → bornes `numpy<2.5`, `xgboost<3.3` dans `pyproject.toml` | 22/11 |
 
 ## Questions pour l'enseignant
+- Quel est notre numéro de groupe (pour nommer le dépôt `mlops-project-2026-groupeX`) ? En attendant, le dépôt s'appelle `aziz28-dev/mlops-project-2026-groupe1` : **« 1 » est provisoire, choisi par nous**. Au besoin, renommer le dépôt et mettre à jour `git remote`, `README.md` et `SYNOPSIS.md`.
 - Format de la soutenance finale : avec slides (guide) ou sans slides (mail 1) ?
 - Les aliases MLflow (`@champion`) sont-ils acceptés à la place des stages Staging/Production ?
