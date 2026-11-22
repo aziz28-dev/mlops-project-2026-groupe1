@@ -1,0 +1,45 @@
+Bonjour à toutes et à tous,
+Dans le cadre du lancement de vos projets MLOps, je vous invite à remplir le formulaire suivant afin de renseigner la composition de vos équipes et les premières informations relatives à votre projet :
+Formulaire : https://forms.gle/ow1UtnUPSa5Zc2CE9
+Merci de veiller à ce qu'un seul formulaire soit soumis par groupe, en renseignant soigneusement toutes les informations demandées.
+
+Séance prochaine : suivi d'avancement noté
+La prochaine séance sera consacrée au suivi de l'avancement de vos projets. Cette évaluation représentera 30% de la note du projet.
+Chaque groupe devra préparer une présentation de 5 diapositives maximum, structurée comme suit :
+
+Diapositive 1 — Équipe et présentation du projet
+* Membres du groupe et répartition prévisionnelle des responsabilités.
+* Titre du projet et contexte métier.
+* Problème concret à résoudre et intérêt de la solution proposée.
+
+Diapositive 2 — Dataset et formulation du problème ML
+* Source et présentation du dataset : volume, variables et type de données.
+* Problème traité : classification ou régression, variable cible et objectif de prédiction.
+* Premières observations sur les données et justification du choix du dataset.
+
+Diapositive 3 — Architecture MLOps envisagée
+* Schéma global de l'architecture prévue.
+* Outils et technologies retenus : DVC, MLflow, FastAPI, Docker, GitHub Actions, Prefect, monitoring, etc.
+* Rôle des principaux composants et justification des choix.
+* Périmètre technique prévu en fonction de la taille de votre équipe.
+
+Diapositive 4 — Travail réalisé à ce stade
+* Tâches effectivement réalisées depuis le démarrage.
+* État du dataset, du dépôt GitHub et des premières expérimentations.
+* Premiers résultats ou éléments concrets disponibles : code, pipeline, modèle initial, configuration des outils, captures d'écran, etc.
+* Difficultés techniques déjà rencontrées, le cas échéant.
+
+Diapositive 5 — Planning et prochaines étapes
+* Tâches restantes et priorités immédiates.
+* Répartition du travail entre les membres.
+* Planning prévisionnel avec les principaux jalons.
+* Risques ou difficultés anticipés et solutions envisagées.
+
+Quelques consignes importantes
+* La présentation doit être synthétique, claire et concrète. Évitez les diapositives trop chargées en texte.
+* Présentez ce qui est réellement fait, et distinguez-le clairement de ce qui est simplement prévu.
+* Privilégiez les schémas d'architecture, les tableaux de synthèse et les preuves de réalisation.
+* Chaque membre du groupe doit maîtriser l'ensemble du projet et être capable d'expliquer sa contribution.
+* Il n'est pas attendu que toute l'architecture soit déjà implémentée à ce stade, mais vos choix doivent être cohérents et votre progression tangible.
+
+L'objectif de cette séance est de vérifier que chaque groupe a bien démarré, que le cadrage est pertinent et que le travail avance selon une démarche structurée.

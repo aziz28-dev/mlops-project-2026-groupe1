@@ -1,0 +1,82 @@
+Bonjour à toutes et à tous,
+Nous entrons désormais dans la phase centrale et concrète de notre module MLOps & Industrialisation de l’IA.
+Comme nous l’avons souligné au fil de nos séances, entraîner un modèle dans un notebook Jupyter (Proof of Concept) ne constitue que la première étape. En entreprise, comme dans vos futurs Projets de Fin d’Études (PFE), l’enjeu réside surtout dans votre capacité à industrialiser, automatiser, déployer et monitorer vos modèles, tout en garantissant leur fiabilité, leur maintenabilité et leur reproductibilité.
+C’est précisément l’objectif du Projet de Module MLOps, qui représente 40 % de la note globale du module et dont nous lançons officiellement les travaux aujourd’hui.
+1. Esprit et piliers techniques du projet
+Vous aurez pour objectif de concevoir et de déployer une plateforme MLOps complète de bout en bout, à partir d’une problématique métier et d’un jeu de données réel de votre choix.
+Le projet s’articulera autour des piliers suivants :
+1. Software Craftsmanship & Reproductibilité
+Mise en place d’une architecture modulaire (src/), gestion rigoureuse des environnements (Poetry / Pipenv), pre-commit hooks et outils de qualité de code (Ruff / Black / Flake8).
+2. Versioning des données & Pipelines
+Gestion et versioning des données avec DVC, incluant la configuration d’un remote storage.
+3. Expérimentation & Gouvernance des modèles
+Tracking systématique des expérimentations et gestion du cycle de vie des modèles à travers le Model Registry MLflow.
+4. Microservice d’inférence
+Développement d’une API REST performante avec validation Pydantic via FastAPI, puis conteneurisation avec Docker / Docker Compose.
+5. Intégration & Tests Continus (CI/CD)
+Mise en œuvre d’une pyramide de tests avec Pytest, ainsi que d’un workflow automatisé GitHub Actions, incluant la publication automatique de métriques avec CML.
+6. Orchestration
+Construction d’un pipeline reproductible et résilient à l’aide de Prefect 3.x.
+7. Observabilité en production
+Mise en place d’un système de monitoring permettant notamment la détection de Data Drift et de Concept Drift avec Evidently AI.
+L’objectif du projet n’est donc pas uniquement d’obtenir un modèle performant, mais de démontrer votre capacité à construire un système ML industrialisé, reproductible, automatisé et maintenable.
+2. Constitution des groupes
+Taille des équipes : 1 à 4 étudiants par groupe.
+Les exigences techniques et le barème sont adaptés à la taille de l’équipe.
+Veuillez consulter la Section 3 du Guide du Projet pour connaître précisément les attendus selon votre configuration : Solo / Binôme / Trinôme / Quatuor.
+3. Choix du sujet & soumission du synopsis — Jalon 1
+Vous disposez d’une large liberté dans le choix du cas d’usage : santé, fintech, détection de fraude, customer churn, énergie, logistique, industrie, etc.
+Le projet devra toutefois s’appuyer sur un jeu de données réel, suffisamment riche et pertinent, provenant par exemple de Kaggle, UCI, Hugging Face ou de plateformes Open Data.
+⚠️ Important : les datasets académiques basiques tels que Iris ou Titanic sont strictement interdits.
+À réaliser avant le [Date limite – ex. J+10 à 23h59]
+Compléter le fichier TEMPLATE_SYNOPSIS_PROJET.md fourni.
+Créer votre dépôt GitHub public selon la convention :
+mlops-project-2026-groupeX
+Déposer le synopsis complété dans votre dépôt.
+Soumettre le lien du dépôt via :
+[Lien du formulaire de dépôt des sujets]
+Une validation et un retour seront effectués sous 48 heures, afin de permettre un démarrage rapide de l’implémentation.
+4. Validation finale — Dernière séance du module
+⚠️ Modalité importante :
+La validation finale du projet se déroulera en présentiel lors de la dernière séance (Séance 7) du module.
+Format de l’évaluation
+Chaque groupe disposera de 15 à 20 minutes, réparties comme suit :
+10 minutes de démonstration live ;
+5 à 10 minutes de questions techniques individuelles.
+Il n’y aura pas de présentation théorique sous forme de slides.
+L’évaluation sera réalisée directement sur machine, à travers notamment :
+le déclenchement du pipeline GitHub Actions ;
+le build et l’exécution du conteneur Docker ;
+les requêtes d’inférence via cURL / Postman sur l’API FastAPI ;
+l’inspection des expérimentations et modèles dans MLflow UI ;
+la génération et l’analyse d’un rapport de dérive avec Evidently AI.
+Chaque membre du groupe pourra être interrogé individuellement afin de vérifier sa maîtrise effective du code, des choix architecturaux et des outils utilisés.
+5. Documents de référence
+Veuillez consulter attentivement les documents de référence disponibles sur votre espace de cours / Drive.
+📄 GUIDE DU PROJET
+GUIDE_PROJET_MODULE_MLOPS.pdf
+Ce document constitue le cahier des charges officiel du projet. Il présente notamment :
+l’architecture cible ;
+les exigences techniques ;
+les exemples de sujets par domaine ;
+les attendus selon la taille des équipes ;
+la grille détaillée d’évaluation sur 20 points.
+📥 Accès au guide :
+GUIDE_PROJET_MODULE_MLOPS.pdf — Google Drive
+📝 TEMPLATE DU SYNOPSIS
+TEMPLATE_SYNOPSIS_PROJET.md
+Ce fichier constitue le gabarit obligatoire pour cadrer votre :
+problématique métier ;
+dataset ;
+objectif de prédiction ;
+métriques d’évaluation ;
+architecture ;
+pipeline MLOps envisagé.
+📥 Accès au template :
+TEMPLATE_SYNOPSIS_PROJET.md — Google Drive
+⚠️ Important : veuillez prendre connaissance du Guide du Projet dans son intégralité avant de commencer l’implémentation, notamment des exigences techniques et de la grille d’évaluation. Le template du synopsis doit également être complété et soumis conformément aux consignes de la section 3.
+Je reste bien entendu à votre disposition pour toute question ou discussion technique, notamment lors des séances de TP ou par email.
+Je vous souhaite à toutes et à tous bon travail et un excellent démarrage dans ce projet, qui constitue une occasion de mettre en pratique les principes et outils essentiels de l’ingénierie MLOps.
+Bon courage à toutes et à tous, et surtout bon développement ! 🚀
+Bien cordialement,
+Haythem Ghazouani

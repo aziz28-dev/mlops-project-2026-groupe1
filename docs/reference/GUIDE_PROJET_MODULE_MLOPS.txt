@@ -1,0 +1,447 @@
+MLOps & Industrialisation de l’IA – Projet de Fin de Module Guide de Cadrage & Cahier des Charges
+
+
+        ÉCOLE D’INGÉNIEURS EN INFORMATIQUE — OPTION DATA SCIENCE &
+                         INTELLIGENCE ARTIFICIELLE
+MODULE MLOPS & INDUSTRIALISATION DE L’IA (42 HEURES)
+
+ GUIDE OFFICIEL DU PROJET DE FIN DE MODULE
+          Conception & Déploiement d’une Plateforme MLOps End-to-End
+ Versioning DVC, Tracking MLflow, API FastAPI, Docker, CI/CD Actions, Prefect 3.x & Monitoring
+                                            Drift
+
+
+
+Enseignant responsable : Haythem Ghazouani           Contact officiel : haythemghz@yahoo.fr
+Public : Terminale / Bac+5 Ingénieur DS & IA         Coefficient : 40% de la note finale du module (/20
+                                                     pts)
+Format des groupes : 1 à 4 étudiants (Solo, Bi-      Durée estimée : 4 à 6 semaines (mode projet agile)
+nôme, 3 ou 4)
+Livrables attendus : Dépôt GitHub, Rapport (6–       Soutenance : 20 min (10 min pitch + 5 min live
+8 p.) & Démo                                         demo + 5 min Q&A)
+
+  Ambition Industrielle : Votre Carte de Visite d’Excellence pour le PFE et l’Emploi
+
+  Le passage d’un algorithme de Machine Learning fonctionnant isolément dans un notebook Jupyter
+  à un système autonome, robuste et monitoré en production constitue aujourd’hui le défi
+  numéro 1 des équipes Data mondiales.
+  L’objectif fondamental de ce projet intégrateur (Capstone Project) est de construire une véritable
+  plateforme MLOps de niveau entreprise, couvrant 100% de la chaîne de valeur de l’IA in-
+  dustrielle. Vous ne livrerez pas un simple modèle : vous déploieriez une infrastructure logicielle
+  vivante, testée en intégration continue, conteneurisée, orchestrée et capable de détecter
+  ses propres dérives pour s’auto-réentraîner. Ce projet constitue la pièce maîtresse de votre
+  portfolio d’ingénieur et un tremplin direct vers votre Projet de Fin d’Études (PFE).
+
+
+
+  Compétences Opérationnelles Évaluées à l’Issue du Projet
+
+      1. Software Engineering : Modularisation stricte (src/), typage statique, docstrings et linters
+         (flake8, black).
+      2. Data Versioning : Gestion des données et pipelines reproductibles via DVC et stockage
+         distant.
+      3. Expérimentation & Gouvernance : Suivi des runs, métriques, artefacts et promotion de
+         modèles avec MLflow Registry.
+      4. Inference Serving & Packaging : Création de microservices REST FastAPI et conte-
+         neurisation Docker non-root.
+      5. CI/CD & CML : Automatisation des tests (Pytest) et génération de rapports de métriques
+         sur Pull Request (GitHub Actions + CML).
+      6. Orchestration & CD : Exécution résiliente de flux DAG et déploiements zero-downtime
+         (Blue/Green, Canary) avec Prefect 3.x.
+      7. Observabilité & Feedback Loop : Détection de Data Drift (KS, χ2 , PSI), métriques
+         Prometheus et réentraînement autonome.
+
+
+
+
+                                              Page 1 sur 9
+MLOps & Industrialisation de l’IA – Projet de Fin de Module Guide de Cadrage & Cahier des Charges
+
+
+Table des matières
+
+1 Architecture Technique de Référence & Piliers MLOps                                                     3
+  1.1 Déclinaison des 7 Piliers Techniques Obligatoires . . . . . . . . . . . . . . . . . . . . . . .     3
+
+2 Organisation des Groupes & Responsabilités (1 à 4 Étudiants)                                            4
+  2.1 Périmètre Attendu selon la Taille de l’Équipe . . . . . . . . . . . . . . . . . . . . . . . . .     4
+  2.2 Matrice des Rôles Suggérée (Exemple Groupe de 4) . . . . . . . . . . . . . . . . . . . . . .        4
+
+3 Critères de Sélection du Dataset & Directives Méthodologiques                                           5
+  3.1 Critères d’Éligibilité Obligatoires d’un Dataset . . . . . . . . . . . . . . . . . . . . . . . .    5
+  3.2 Portails de Données Recommandés . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .       5
+
+4 Banque de 6 Sujets Exemplaires Prêts à l’Emploi                                                         6
+
+5 Modèle de Synopsis Type & Fiche de Cadrage du Projet                                                    7
+
+6 Livrables Attendus, Calendrier des Jalons & Soutenance Orale                                            8
+  6.1 Les 3 Livrables Officiels du Projet . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .   8
+  6.2 Calendrier Prévisionnel des Jalons (Timeline) . . . . . . . . . . . . . . . . . . . . . . . . .     8
+  6.3 Déroulement de la Soutenance Orale (20 Minutes par Groupe) . . . . . . . . . . . . . . .            8
+
+7 Grille d’Évaluation Détaillée (/20 Points)                                                              9
+
+
+
+  Démarche Directrice & Philosophie MLOps du Projet
+
+  Un projet de Machine Learning en entreprise ne se résume jamais au score prédictif d’un modèle.
+  La réussite d’un ingénieur MLOps repose sur trois règles d’or incontournables :
+     — 1. Reproductibilité Absolue : N’importe quel membre de l’équipe ou un nouvel arrivant
+         doit pouvoir réexécuter l’intégralité du pipeline en 3 commandes de terminal (git clone,
+         dvc pull, pytest) et obtenir exactement les mêmes résultats.
+     — 2. Défense en Profondeur & Tests Systématiques : Aucun code ne peut être fusionné
+         sur la branche main sans que les tests unitaires, les tests de validation de schéma et les
+         vérifications de linting ne soient au vert dans GitHub Actions.
+     — 3. Résilience & Boucle de Rétroaction : Tout modèle déployé est appelé à dériver sous
+         l’effet du temps et de l’évolution des comportements. Votre plateforme doit être capable de
+         mesurer sa propre santé statistique et de réagir avant même que l’utilisateur final ne
+         perçoive une dégradation.
+
+
+
+  Conseils d’Organisation pour le Mode Projet Agile
+
+      — Travaillez en branches Git dédiées : Ne committez jamais directement sur main. Créez
+        des branches par fonctionnalité (feature/dvc-pipeline, feature/fastapi-serving, etc.)
+        et utilisez les Pull Requests pour déclencher les workflows CI et CML.
+      — Commencez simple, itérez vite (MVP MLOps) : Mettez en place un modèle de base
+        (baseline rapide) et validez la chaîne complète (Git → DVC → FastAPI → Docker → CI)
+        dès les premières semaines avant d’optimiser les hyperparamètres.
+      — Documentez au fil de l’eau : Remplissez votre README.md et vos docstrings dès l’écriture
+        du code pour gagner un temps précieux lors de la rédaction du rapport final.
+
+
+
+
+                                                Page 2 sur 9
+MLOps & Industrialisation de l’IA – Projet de Fin de Module Guide de Cadrage & Cahier des Charges
+
+
+1. Architecture Technique de Référence & Piliers MLOps
+      Chaque projet s’appuie sur le schéma directeur d’architecture MLOps industrielle :
+
++ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -+
+
+|                                                                         ARCHITECTURE TECHNIQUE DE REFERENCE
+                       |
++ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -+
+
+|     1. DATA & PIPELINE                                     2. TRACKING & REGISTRY                                       3. SERVING & PACKAGING
+                       |
+| - Versioning DVC ( remote )                                - MLflow Tracking Server                                     - Microservice FastAPI REST (
+        Pydantic )                   |
+| - R e p r o d u c ti b i l i t e dvc . yaml - Comparaison h yp er pa ra m et re s - Dockerfile multi - stage securise
+                       |
+| - Ingestion & Preprocessing - Model Registry ( Staging / Prod ) - Verification Healthcheck &
+        Swagger                    |
++ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -+
+
+|     4. AUT OMATISAT ION CI / CD                             5. ORCHESTRATION PREFECT                                      6. MONITORING & RETRAINING
+                       |
+| - GitHub Actions Workflows - Prefect 3. x Flows & Tasks                                                                   - Detection Data Drift ( KS , Chi2 ,
+        PSI )              |
+| - Pytest ( Couverture > 75%) - Work Pool & Worker process                                                                 - Exportateur Prometheus (
+        OpenMetrics )                      |
+| - Rapports CML sur PR                                       - Scheduling CRON regulier                                    - Boucle de Reentrai nement ( Feedback
+          Loop ) |
++ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -+
+
+
+
+
+1.1. Déclinaison des 7 Piliers Techniques Obligatoires
+   — Pilier 1 (Craftsmanship) : Code propre organisé sous src/, séparation des responsabilités,
+      régles PEP8, pyproject.toml.
+   — Pilier 2 (DVC) : Suivi des datasets volumineux sans surcharger Git, configuration d’un remote
+      (local ou cloud) et définition des étapes dans dvc.yaml.
+   — Pilier 3 (MLflow) : Logging de plusieurs architectures (ex : XGBoost vs RandomForest vs
+      LogReg), traçabilité des matrices de confusion, et promotion formelle vers le statut Production.
+   — Pilier 4 (Serving) : Endpoints /predict et /health typés avec Pydantic, gérant l’inférence
+      unitaire et batch. Image Docker légère (ex : python:3.11-slim) exécutée sous utilisateur non-
+      root.
+   — Pilier 5 (CI/CD & CML) : Workflow GitHub Actions déclenchant le linting (flake8, black)
+      et la suite de tests pytest. Publication automatique d’un rapport de métriques et graphes en
+      commentaire de Pull Request.
+   — Pilier 6 (Prefect) : Flow principal décoré @flow enchaînant les tâches atomiques @task avec
+      gestion des retries, déploiement déclaratif prefect.yaml, Work Pool et déclenchement planifié.
+   — Pilier 7 (Drift & Réentraînement) : Mesure statistique rigoureuse des écarts de distribution
+      (test KS pour le numérique, χ2 pour le catégoriel, et calcul formel du PSI). Export au format
+      OpenMetrics pour Prometheus et déclenchement autonome du réentraînement si le drift est critique
+      (≥ 30%).
+
+
+
+
+                                                                                       Page 3 sur 9
+MLOps & Industrialisation de l’IA – Projet de Fin de Module Guide de Cadrage & Cahier des Charges
+
+
+2. Organisation des Groupes & Responsabilités (1 à 4 Étudiants)
+    Les étudiants choisissent librement la taille de leur équipe (de 1 à 4 membres). Le niveau d’exigence
+technique s’adapte proportionnellement :
+2.1. Périmètre Attendu selon la Taille de l’Équipe
+      Taille      Configuration         Périmètre Technique Attendu
+    1 étudiant    Monôme (Solo)         Tronc commun complet : DVC, MLflow Tracking & Registry, API
+                                        FastAPI, Dockerfile, pipeline CI GitHub Actions, détection statis-
+                                        tique de Data Drift (KS ou PSI) avec test de validation.
+   2 étudiants    Binôme (Standard)     Tronc commun + Orchestration complète avec Prefect 3.x (Work
+                                        Pool + CRON) + Rapport CML automatisé avec courbes sur Pull
+                                        Request + simulateur de dérive.
+   3 étudiants    Trinôme               Binôme + Stratégies de déploiement Zero-Downtime (Blue/Green ou
+                                        Canary) + Dashboard interactif d’observabilité HTML/Evidently +
+                                        Exportateur métriques Prometheus.
+   4 étudiants    Groupe de 4           Trinôme + Fermeture de boucle 100% autonome (Trigger de réentraî-
+                                        nement Prefect sur alerte drift) + Interface Web utilisateur de démo
+                                        (Streamlit ou Gradio) connectée à l’API + Simulation de charge de
+                                        requêtes.
+
+2.2. Matrice des Rôles Suggérée (Exemple Groupe de 4)
+   — Ingénieur Données & Pipelines (Data/DVC Lead) : Collecte du dataset, EDA, pipeline
+      DVC (dvc.yaml), configuration du stockage remote, nettoyage et ingénierie des features.
+   — Ingénieur Machine Learning (Modeling & Tracking Lead) : Conception des modèles, ex-
+      ploration des hyperparamètres, intégration MLflow Tracking, Model Registry et évaluation com-
+      parative.
+   — Ingénieur Serving & CI/CD (DevOps/MLOps Lead) : Développement du microservice Fas-
+      tAPI, validation Pydantic, conteneur Dockerfile, workflows GitHub Actions, CML et orchestration
+      Prefect.
+   — Ingénieur Fiabilité & Observabilité (Monitoring & SRE Lead) : Moteur de calcul de Data
+      Drift (KS, χ2 , PSI), simulateur de flux réel, dashboard HTML, export Prometheus et boucle de
+      réentraînement.
+
+  Principe de Solidarité Technique & Évaluation Individuelle via Git Log
+
+  Tous les membres sont coresponsables de la cohérence globale de la plateforme. L’historique des
+  commits Git (git log) sera inspecté individuellement lors de la soutenance pour vérifier la
+  contribution réelle, régulière et équilibrée de chaque étudiant.
+
+
+
+
+                                               Page 4 sur 9
+MLOps & Industrialisation de l’IA – Projet de Fin de Module Guide de Cadrage & Cahier des Charges
+
+
+3. Critères de Sélection du Dataset & Directives Méthodologiques
+   Le choix d’un dataset adapté conditionne directement la faisabilité de la chaîne MLOps :
+3.1. Critères d’Éligibilité Obligatoires d’un Dataset
+   — Volume de données : Entre 2 000 et 200 000 lignes (Taille idéale : 5 000 à 50 000 enregistre-
+      ments, fichier < 100 Mo). Évitez les datasets gigantiques (> 500 Mo) qui dépassent les quotas de
+      temps d’exécution de GitHub Actions gratuit.
+   — Typologie mixte : Le jeu de données doit comporter au moins 5 variables numériques et au
+      moins 2 variables catégorielles afin de pouvoir illustrer les différents tests de dérive (KS pour
+      le continu, χ2 pour le catégoriel).
+   — Cible métier explicite : Problème de classification (binaire ou multiclasse) ou de régression
+      clairement défini répondant à une vraie décision d’entreprise.
+   — Potentiel de Data Drift réaliste : Présence d’une dimension temporelle ou possibilité de dé-
+      finir une sous-population / décalage réaliste pour simuler l’avant (baseline) et l’après (flux de
+      production).
+   — Licence libre : Données sous licence ouverte (CC, MIT, Open Data, Kaggle, UCI).
+3.2. Portails de Données Recommandés
+   — Kaggle Datasets : https://www.kaggle.com/datasets (Recherchez par thématique : Banking,
+      Health, Retail, Energy).
+   — UCI Machine Learning Repository : https://archive.ics.uci.edu/ (Référence acadé-
+      mique et industrielle).
+   — OpenML : https://www.openml.org/ (Nombreux jeux de données déjà nettoyés avec bench-
+      marks).
+   — Portails Publics Nationaux : https://www.data.gouv.fr/, Eurostat, World Bank Open Data.
+
+  Datasets Strictement Interdits (Jeux de Données Scolaires Jouets)
+
+  Pour garantir un niveau ingénieur professionnel, les jeux de données académiques élémentaires sui-
+  vants sont formellement interdits : Titanic, Iris de Fisher, Boston Housing, California Housing,
+  MNIST, Wine Quality, Palmer Penguins.
+
+
+
+
+                                              Page 5 sur 9
+MLOps & Industrialisation de l’IA – Projet de Fin de Module Guide de Cadrage & Cahier des Charges
+
+
+4. Banque de 6 Sujets Exemplaires Prêts à l’Emploi
+    Si votre équipe n’a pas de sujet d’entreprise spécifique, vous pouvez choisir l’un des 6 sujets pré-calibrés
+suivants :
+Sujet & Domaine         Cas d’Usage Métier & Type ML                 Dataset Suggéré & Scénario de
+                                                                     Drift
+1. Fintech              Détection de Fraude Bancaire                 Dataset : Credit Card Fraud (Kag-
+                        Temps Réel                                   gle/ULB) ou Paysim.
+                        Classification binaire déséquilibrée (F1,    Drift : Hausse saisonnière des montants
+                        PR-AUC). Décision : bloquer la transac-      ou nouveaux types de commerçants.
+                        tion.
+2. Industrie 4.0        Maintenance Prédictive d’Équipe-             Dataset : AI4I 2020 Predictive Mainte-
+                        ments                                        nance (UCI).
+                        Classification multi-classes (types de       Drift : Usure des capteurs (sensor drift)
+                        pannes) ou régression (RUL). Décision :      et variations de température d’atelier.
+                        planifier révision.
+3. E-Commerce           Prédiction       d’Attrition      Client     Dataset : E-Commerce Customer Churn
+                        (Churn B2C)                                  ou KKBox Churn.
+                        Classification binaire avec probabilité de   Drift : Modification tarifaire, campagne
+                        résiliation pour déclencher des offres de    concurrente ou refonte de catalogue.
+                        fidélisation.
+4. Santé & Bio          Aide au Diagnostic du Risque Car-            Dataset : Cardiovascular Disease
+                        diaque                                       (Kaggle / 70k patients).
+                        Classification binaire (contrainte sévère    Drift : Évolution de la tranche d’âge ad-
+                        sur le rappel / False Negatives).            mise ou changement de matériel biomé-
+                                                                     dical.
+5. Smart Grid           Prévision de Consommation Élec-              Dataset : PJM Hourly Energy
+                        trique                                       Consumption (Kaggle).
+                        Régression continue (RMSE, MAPE).            Drift : Vagues météo extrêmes ou chan-
+                        Décision : dimensionnement de la pro-        gements massifs des habitudes de télé-
+                        duction d’énergie.                           travail.
+6. Crédit               Scoring d’Octroi de Prêt Bancaire            Dataset : Home Credit Default Risk ou
+                                                                     German Credit.
+                        Classification binaire avec contrainte       Drift : Inflation macro-économique ou
+                        forte d’explicabilité et équité algorith-    durcissement des taux directeurs.
+                        mique.
+
+
+
+
+                                                  Page 6 sur 9
+MLOps & Industrialisation de l’IA – Projet de Fin de Module Guide de Cadrage & Cahier des Charges
+
+
+5. Modèle de Synopsis Type & Fiche de Cadrage du Projet
+   Chaque groupe doit soumettre sa fiche de cadrage sous forme d’un fichier Markdown SYNOPSIS.md
+déposé à la racine du dépôt GitHub pour validation par l’enseignant avant la fin du Jalon 1 :
+
+  Canevas de la Fiche de Cadrage SYNOPSIS.md
+
+  # FICHE DE CADRAGE DU PROJET MLOPS - 2 0 2 6 / 2 0 2 7
+  1. Informations Equipe
+  - Titre du Projet : [ Ex : Plateforme MLOps de Detection de Fraude Bancaire ]
+  - Membres : 1. Nom ( Data / DVC Lead ) , 2. Nom ( ML / MLflow Lead ) , 3. Nom ( Serving / CI Lead ) , 4.
+      Nom ( SRE / Drift Lead )
+  - Depot GitHub : https :// github . com / mon - organisation / mon - projet - mlops
+
+  2. Problematique Metier & Cas d ’ Usage
+  - Contexte business et decision declenchee par la prediction
+  - Objectif metier quantifie ( KPI ) : [ Ex : Detecter 95% des fraudes avec faux positifs < 2%]
+
+  3. Formulation Machine Learning & Choix du Dataset
+  - Type de tache : [ Classi fication Binaire / Multiclasse / Regression ]
+  - Variable Cible ( Target ) : [ Nom de la colonne cible et signification ]
+  - Source du Dataset & Licence : [ URL exacte et type de licence libre ]
+  - Dimensions : [ Nombre d ’ e nr eg i st re me n ts et nombre de variables ]
+  - Metriques ML cibles : [ Ex : F1 - score >= 0.85 , ROC - AUC >= 0.90 , Latence inference < 150 ms ]
+
+  4. Architecture MLOps Previs ionnelle
+  - DVC ( stockage remote local / cloud ) | MLflow Tracking Server & Model Registry
+  - Microservice FastAPI avec validation Pydantic | Image Docker multi - stage securisee
+  - GitHub Actions CI ( Linting flake8 / black + Pytest ) | Rapport automatique CML sur PR
+  - Orchestration Prefect 3. x ( Flows , Tasks , Work Pool , CRON ) | Deploiement [ Blue / Green ou
+      Canary ]
+  - Observabilite : Tests statistiques ( KS , Chi2 , PSI ) + Prometheus OpenMetrics
+
+  5. Scenario de Data Drift Simule
+  - Quelles variables vont deriver en production ? [ Ex : Decalage moyen sur montants d ’ achat ]
+  - Seuil d ’ alerte critique : [ Ex : PSI >= 0.20 ou proportion de variables en derive >= 30%]
+  - Action corrective automatique : [ Appel du Flow Prefect de reentra inement et mise a jour
+      Registry ]
+
+
+
+
+                                                  Page 7 sur 9
+MLOps & Industrialisation de l’IA – Projet de Fin de Module Guide de Cadrage & Cahier des Charges
+
+
+6. Livrables Attendus, Calendrier des Jalons & Soutenance Orale
+6.1. Les 3 Livrables Officiels du Projet
+    1. Dépôt GitHub Complet & Opérationnel :
+       — Structure de code propre (src/, tests/, pipelines/).
+       — Fichiers d’infrastructure prêts : dvc.yaml, Dockerfile, requirements.txt, .github/workflows/ci.yml.
+       — README.md exhaustif avec badges CI verts, instructions de reproduction en 3 commandes et
+         schéma d’architecture.
+       — Tag Git officiel de clôture : v1.0-release.
+   2. Rapport Synthétique (6 à 8 pages maximum en PDF) :
+      — Problématique métier, architecture, résultats comparatifs MLflow, aperçu du DAG Prefect,
+        résultats des tests CI/CD et analyse détaillée du rapport de Data Drift.
+   3. Live Démo lors de la Soutenance :
+      — Démonstration fonctionnelle de bout en bout (requête API, UI Prefect, injection de drift, auto-
+         réentraînement).
+6.2. Calendrier Prévisionnel des Jalons (Timeline)
+   Jalon             Échéance        Objectif à Valider
+   Jalon 1           Fin Semaine 2   Fiche de cadrage SYNOPSIS.md soumise, dépôt GitHub créé et dataset
+                                     validé.
+   Jalon 2           Fin Semaine 4   Pipeline DVC opérationnel + Expérimentation MLflow + Premiers
+                                     tests Pytest.
+   Jalon 3           Fin Semaine 5   Microservice FastAPI + Conteneur Docker + Pipeline GitHub Actions
+                                     CI actif.
+   Jalon 4           Fin Semaine 6   DAG Prefect déployé + Détection de Data Drift + Dashboard HTML.
+   Livrable Final    Semaine 7 / 8   Tag v1.0-release, rapport PDF déposé & Soutenances orales devant
+                                     jury.
+
+6.3. Déroulement de la Soutenance Orale (20 Minutes par Groupe)
+   — 10 minutes de Présentation (Pitch & Slides) : Problématique, choix d’architecture, modèles
+      et défis résolus.
+   — 5 minutes de Live Demo : Appel API sur Docker, interface Prefect, détection de drift et alerte
+      Prometheus.
+   — 5 minutes de Questions / Réponses techniques : Évaluation individuelle des compétences
+      MLOps de chaque étudiant.
+
+
+
+
+                                             Page 8 sur 9
+MLOps & Industrialisation de l’IA – Projet de Fin de Module Guide de Cadrage & Cahier des Charges
+
+
+7. Grille d’Évaluation Détaillée (/20 Points)
+   Le barème d’évaluation est équilibré et réparti sur les 6 composantes clés du module :
+   Composante MLOps                          Critères Précis & Attendus Tech-                 Barème     Note
+                                             niques
+   1. Conception Logicielle & DVC            Qualité du Code & Versioning Don-                  3 pts
+                                             nées
+                                             — Modularité du package src/, clean code,          1.5 pt   [   ]
+                                             typage statique, flake8/black
+                                             — Pipeline DVC reproductible (dvc.yaml)            1.5 pt   [   ]
+                                             avec remote storage configuré
+   2. Expérimentation & Model Registry       Traçabilité & Gouvernance MLflow                   3 pts
+                                             — Suivi rigoureux des runs (hyperpara-             1.5 pt   [   ]
+                                             mètres, métriques, artefacts, courbes)
+                                             — Enregistrement du modèle champion                1.5 pt   [   ]
+                                             dans le Model Registry
+   3. Serving API & Conteneurisation         Microservice Ingestion & Docker                    3 pts
+                                             — API FastAPI robuste, endpoints REST              1.5 pt   [   ]
+                                             (/predict, /health) avec Pydantic
+                                             — Dockerfile optimisé (léger, utilisateur          1.5 pt   [   ]
+                                             non-root, build multi-stage)
+   4. Intégration Continue (CI/CD)           GitHub Actions, Pytest & CML                       4 pts
+                                             — Suite de tests Pytest complète (uni-              2 pts   [   ]
+                                             taires, schéma, inférence) avec couverture
+                                             > 75%
+                                             — Workflow CI automatisé (lint + tests)             2 pts   [   ]
+                                             avec publication d’un rapport CML sur PR
+   5. Orchestration & Déploiement            Prefect 3.x & Stratégies Zero-                     3 pts
+                                             Downtime
+                                             — Flow d’entraînement orchestré en DAG             1.5 pt   [   ]
+                                             avec gestion des réessais (retries)
+                                             — Planification CRON / Work Pool et                1.5 pt   [   ]
+                                             stratégie (Blue/Green, Canary ou Shadow)
+   6. Observabilité & Feedback Loop          Data Drift, Prometheus & Réentraî-                 4 pts
+                                             nement
+                                             — Calcul rigoureux de dérive statistique           1.5 pt   [   ]
+                                             (KS, Chi2 et formellement PSI)
+                                             — Rapport HTML interactif et exposition            1.5 pt   [   ]
+                                             des métriques au format Prometheus
+                                             — Boucle de réentraînement déclenchée au-           1 pt    [   ]
+                                             tomatiquement sur dépassement de seuil
+   TOTAL GENERAL                             Note Globale du Projet de Fin de Mo-             20 / 20
+                                             dule
+   Bonus d’Excellence                        Démo interactive (Streamlit/Gradio) ou       +1 à +2 pts    [   ]
+                                             Monitoring Grafana
+
+
+
+
+Enseignant Responsable : Haythem Ghazouani (haythemghz@yahoo.fr) — Module MLOps & Industrialisation
+                                        de l’IA (2026–2027)
+
+
+
+
+                                              Page 9 sur 9
+

@@ -1,0 +1,42 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+.coverage
+coverage.xml
+htmlcov/
+*.egg-info/
+dist/
+build/
+
+# Données et modèles : suivis par DVC, jamais par Git
+/data/raw/*
+/data/processed/*
+/data/drift/*
+!/data/**/.gitkeep
+/models/*
+!/models/.gitkeep
+
+# MLflow local
+mlruns/
+mlartifacts/
+mlflow.db
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Environnement / secrets
+.env
+*.env
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Claude Code : réglages locaux personnels
+.claude/settings.local.json
