@@ -23,3 +23,39 @@ stages:
     metrics:
       - reports/validation.json:
           cache: false
+
+  prepare:
+    cmd: python -m bankmlops.data.prepare
+    deps:
+      - src/bankmlops/data/prepare.py
+      - data/raw/bank-additional-full.csv
+    params:
+      - seed
+      - data.drop_columns
+      - data.processed_dir
+      - split.reference_ratio
+      - split.test_size
+    outs:
+      - data/processed/train.parquet
+      - data/processed/test.parquet
+      - data/processed/production.parquet
+
+  train:
+    cmd: python -m bankmlops.training.train
+    deps:
+      - src/bankmlops/training/train.py
+      - src/bankmlops/features/build.py
+      - src/bankmlops/evaluation/metrics.py
+      - src/bankmlops/evaluation/plots.py
+      - data/processed/train.parquet
+      - data/processed/test.parquet
+      - data/processed/production.parquet
+    params:
+      - seed
+      - train
+      - mlflow
+    outs:
+      - models/model.joblib
+    metrics:
+      - reports/metrics.json:
+          cache: false

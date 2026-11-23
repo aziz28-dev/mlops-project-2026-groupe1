@@ -12,6 +12,7 @@ data:
   target: y
   positive_label: "yes"
   drop_columns: [duration]        # data leakage : connue seulement après l'appel
+  processed_dir: data/processed   # train / test / production (Parquet)
 
 split:
   reference_ratio: 0.7            # premières lignes (chronologiques) = référence ; reste = "production"
@@ -20,6 +21,9 @@ split:
 train:
   decision_threshold: 0.5
   selection_metric: pr_auc
+  models_enabled: [logreg, random_forest]   # baseline ; xgboost ajouté après la séance de suivi
+  model_path: models/model.joblib           # artefact chargé par l'API (décision D3)
+  metrics_path: reports/metrics.json
   models:
     logreg:
       C: 1.0
@@ -35,7 +39,7 @@ train:
       learning_rate: 0.1
 
 mlflow:
-  tracking_uri: http://127.0.0.1:5000
+  tracking_uri: sqlite:///mlflow.db  # UI : mlflow ui --backend-store-uri sqlite:///mlflow.db
   experiment_name: bank-marketing
   registered_model_name: bank-marketing-classifier
   champion_alias: champion

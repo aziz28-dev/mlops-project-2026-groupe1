@@ -127,7 +127,8 @@ def main() -> None:
 
     out = resolve_path("reports/validation.json")
     out.parent.mkdir(parents=True, exist_ok=True)
-    out.write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8")
+    # newline="\n" : même fichier sous Windows et en CI Linux (pas de CRLF)
+    out.write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8", newline="\n")
     print(f"Validation OK : {summary}")
 
 

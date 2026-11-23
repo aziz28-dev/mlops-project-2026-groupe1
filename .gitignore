@@ -16,11 +16,8 @@ build/
 # Les sorties des stages DVC ne doivent PAS être ignorées ici : DVC écrit lui-même un .gitignore
 # dans chaque dossier de sortie (ex. data/raw/.gitignore). Retirer la ligne d'un dossier dès qu'il
 # devient une sortie DVC.
-/data/processed/*
 /data/drift/*
 !/data/**/.gitkeep
-/models/*
-!/models/.gitkeep
 
 # MLflow local
 mlruns/
