@@ -35,9 +35,9 @@ Pour la séance : phase 3 = « partielle (préparation minimale dans la baseline
 | — | SYNOPSIS.md complété (noms, emails) | A + B | En cours | SYNOPSIS.md | Compléter les noms, pousser sur GitHub |
 | 0 | Dépôt + environnement + pre-commit | A | Terminé | `poetry install` OK (Python 3.11.9) · `pre-commit run --all-files` tous hooks Passed · `pytest` 7 passed · PR #1 mergée (merge commit `9624335`, 22/11) | — |
 | 1 | Ingestion + validation + DVC | A | Terminé (PR #2, merge commit `52c7de3`, 22/11) | DVC 3.67.1 · `dvc repro` OK (41 188 lignes, 21 colonnes, 11,27 % de yes) · 2e `dvc repro` = stages sautés · `dvc status` « up to date » · `dvc push` : 2 fichiers vers remote local · 18 tests, couverture 84 % · ordre chronologique et note `duration` confirmés dans `bank-additional-names.txt` | A + B : trancher D1 (nécessaire avant la phase 8 / CML) |
-| 2 | EDA (version courte : 2 figures) | A | En attente de validation | `notebooks/01_eda.ipynb` exécuté de bout en bout · `reports/figures/target_imbalance.png` + `macro_drift_over_time.png` · référence → production : euribor3m 4,685 → 1,138 ; emp.var.rate 1,000 → −2,061 ; taux de yes 5,6 % → 24,6 % ; contact cellular 52,2 % → 89,9 % · 12 doublons, `pdays = 999` = 96,3 % | A : commits + PR, puis phase 4 baseline |
-| 3 | Préparation + split temporel | A | Non commencé | — | Minimal dans la phase 4 baseline ; version complète après le 24/11 |
-| 4 | Entraînement + MLflow (baseline LogReg + RF) | A | Non commencé | — | Lun. 23/11 soir ; XGBoost après le 24/11 |
+| 2 | EDA (version courte : 2 figures) | A | Terminé (PR #4, merge `034b1e9`, 23/11) | `notebooks/01_eda.ipynb` exécuté de bout en bout · `reports/figures/target_imbalance.png` + `macro_drift_over_time.png` · référence → production : euribor3m 4,685 → 1,138 ; emp.var.rate 1,000 → −2,061 ; taux de yes 5,6 % → 24,6 % ; contact cellular 52,2 % → 89,9 % · 12 doublons, `pdays = 999` = 96,3 % | A : commits + PR, puis phase 4 baseline |
+| 3 | Préparation + split temporel | A | Partielle | `data/prepare.py` : suppression de `duration`, split temporel 70/30 (28 831 / 12 357), train/test stratifié 80/20 ; `features/build.py` (scaler + one-hot) ; tests | Après le 24/11 : doublons, `pdays = 999`, `unknown`, tests complets |
+| 4 | Entraînement + MLflow (baseline LogReg + RF) | A | En attente de validation | MLflow 3.18.0 (SQLite) · 2 runs (params, 10 métriques test + production, matrices de confusion, courbes PR, modèle signé) · champion = random_forest dans le Registry (@champion) · `models/model.joblib` exporté · `reports/metrics.json` · stages DVC `prepare` + `train` · 33 tests, couverture 87 % · **Résultats test (référence)** : RF PR-AUC 0,164 / ROC-AUC 0,629 ; LogReg PR-AUC 0,163 / ROC-AUC 0,610 (aléatoire ≈ 0,056) · **Production** : ROC-AUC RF 0,543, LogReg 0,633 | A : commits + PR ; XGBoost et phase 3 après le 24/11 |
 | 5 | CI lint + tests | B | Non commencé | — | Lun. 23/11 (dépend du dépôt GitHub + phase 0 poussée) |
 | 6 | API FastAPI | B | Non commencé | — | — |
 | 7 | Docker | B | Non commencé | — | — |
@@ -51,7 +51,7 @@ Pour la séance : phase 3 = « partielle (préparation minimale dans la baseline
 |---|---|---|---|
 | D1 | Remote DVC accessible en CI | À trancher. Provisoire : remote local `C:\Users\Aziz\dvc-storage`, déclaré dans `.dvc/config.local` (non versionné) | 22/11 |
 | D2 | MLflow stages vs aliases | Aliases proposés (à confirmer) | — |
-| D3 | Chargement du modèle par l'API | Artefact exporté proposé (à confirmer) | — |
+| D3 | Chargement du modèle par l'API | L'API charge `models/model.joblib` (exporté par l'entraînement, suivi par DVC) ; pas de serveur MLflow nécessaire en Docker/CI ; le Registry sert à la gouvernance | 23/11 |
 | D4 | Python 3.11 vs versions récentes | Rester en 3.11 : les dernières versions de numpy (2.5), scipy (1.18) et xgboost (≥ 3.3) exigent Python ≥ 3.12 → bornes `numpy<2.5`, `xgboost<3.3` dans `pyproject.toml` | 22/11 |
 
 ## Questions pour l'enseignant

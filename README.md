@@ -32,10 +32,21 @@ Source officielle : `bank-additional-names.txt`, fourni dans le zip UCI et versi
 ## Pipeline de données (DVC)
 
 ```bash
-poetry run dvc repro     # ingest (téléchargement UCI) -> validate (schéma)
+poetry run dvc repro     # ingest -> validate -> prepare -> train
 poetry run dvc dag       # affiche le DAG
 poetry run dvc pull      # récupère les données depuis le remote (remote partagé : décision D1)
 ```
+
+## Expériences (MLflow)
+
+Le stage `train` enregistre les runs dans `mlflow.db` (SQLite, non versionné). Pour les consulter :
+
+```bash
+poetry run mlflow ui --backend-store-uri sqlite:///mlflow.db --port 5000   # http://127.0.0.1:5000
+```
+
+Le meilleur modèle (selon la PR-AUC sur le test) reçoit l'alias `@champion` dans le Model Registry et
+est exporté en `models/model.joblib`, le fichier chargé par l'API.
 
 ## Statut
 
@@ -43,7 +54,8 @@ poetry run dvc pull      # récupère les données depuis le remote (remote part
 |---|---|
 | Environnement (Poetry, pre-commit, structure `src/`) | ✅ phase 0 |
 | DVC : ingestion + validation, remote local | ✅ phase 1 (remote partagé : décision D1 en attente) |
-| MLflow, API, Docker, CI, Prefect, drift | ⏳ prévu — voir [docs/PROGRESS.md](docs/PROGRESS.md) |
+| Préparation minimale + baseline LogReg / RandomForest dans MLflow | ✅ phase 4 baseline (XGBoost et phase 3 complète à venir) |
+| API, Docker, CI, Prefect, drift | ⏳ prévu — voir [docs/PROGRESS.md](docs/PROGRESS.md) |
 
 ## Installation
 

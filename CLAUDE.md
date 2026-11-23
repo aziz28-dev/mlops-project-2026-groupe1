@@ -7,12 +7,15 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 Ce fichier est lu automatiquement par Claude Code au démarrage de chaque session.
 Il décrit le projet, le périmètre, les conventions et la manière dont Claude doit travailler avec nous.
 
-> **État du dépôt (à mettre à jour au fil des phases) :** phases 0 et 1 faites — Poetry 2.x (`.venv` dans
-> le projet via `poetry.toml`), pre-commit (ruff-check + black), `config.py`, `data/ingest.py`,
-> `data/validate.py`, `dvc.yaml` (stages `ingest` → `validate`). DVC est en dépendance **dev** (pas dans
-> l'image Docker). Remote DVC provisoire = local, dans `.dvc/config.local` (non versionné) en attendant D1.
-> Les tests n'utilisent ni réseau ni vrai dataset (fixtures de `tests/conftest.py`). **Pas encore de
-> préparation, de modèle ni de MLflow.** Ordre chronologique et note `duration` confirmés (README). Dépôt GitHub : `aziz28-dev/mlops-project-2026-groupeB` (renommé le 22/11, ancien nom `...-groupe1`). La section 5 décrit la
+> **État du dépôt (à mettre à jour au fil des phases) :** phases 0, 1, 2 faites, phase 4 « baseline » faite,
+> phase 3 partielle. Poetry 2.x (`.venv` via `poetry.toml`), pre-commit (ruff-check + black). Pipeline DVC
+> `ingest → validate → prepare → train`. MLflow **3.18** écrit directement dans `sqlite:///mlflow.db`
+> (pas besoin de serveur ; UI via `mlflow ui --backend-store-uri sqlite:///mlflow.db`). Dans MLflow 3.x,
+> `log_model(name=...)` (pas `artifact_path`) et sérialisation skops : les arbres RandomForest exigent
+> `skops_trusted_types` (constante `SKOPS_TRUSTED_TYPES` dans `training/train.py`). Seuls `logreg` et
+> `random_forest` sont activés (`train.models_enabled`). DVC est en dépendance **dev**. Remote DVC provisoire
+> = local (`.dvc/config.local`, non versionné) en attendant D1. Les tests n'utilisent ni réseau ni vrai
+> dataset (`tests/conftest.py`), le test d'entraînement isole MLflow dans `tmp_path`. Ordre chronologique et note `duration` confirmés (README). Dépôt GitHub : `aziz28-dev/mlops-project-2026-groupeB` (renommé le 22/11, ancien nom `...-groupe1`). La section 5 décrit la
 > structure *cible* ; ne pas supposer qu'un fichier existe sans le vérifier. Avancement réel : `docs/PROGRESS.md`.
 >
 > Poetry n'est pas forcément dans le PATH des terminaux déjà ouverts : sinon utiliser
@@ -151,7 +154,7 @@ les lit via `src/bankmlops/config.py`, `dvc.yaml` les déclare en `params:`. Ne 
   sauf si le prof exige les stages.
 - **D3 — Chargement du modèle par l'API.** Recommandé : l'API charge un artefact exporté
   (`models/model.joblib` suivi par DVC) pour fonctionner en Docker/CI sans serveur MLflow ;
-  le Registry sert à la gouvernance. Confirmer avec nous.
+  le Registry sert à la gouvernance. **Décidé le 23/11 : artefact exporté `models/model.joblib`.**
 
 ## 8. Comment Claude doit travailler avec nous (IMPORTANT)
 
