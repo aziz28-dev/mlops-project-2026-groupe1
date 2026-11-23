@@ -10,7 +10,7 @@ stages:
     params:
       params.yaml:
         data.raw_dir: data/raw
-        data.source_url:
+        data.source_url: 
           https://archive.ics.uci.edu/static/public/222/bank+marketing.zip
     outs:
     - path: data/raw/bank-additional-full.csv
@@ -30,8 +30,8 @@ stages:
       size: 5834924
     - path: src/bankmlops/data/validate.py
       hash: md5
-      md5: 8bf00182e8b7f507636f2d4d37e5f2f4
-      size: 3924
+      md5: 515de527e9066745ef481a965d2d0e26
+      size: 4015
     params:
       params.yaml:
         data.expected_rows: 41188
@@ -41,5 +41,106 @@ stages:
     outs:
     - path: reports/validation.json
       hash: md5
-      md5: 910217adc17353b5d7ea99cdc3c8ab85
-      size: 73
+      md5: 6b52339a83d7c581a391e21a0348ef34
+      size: 68
+  prepare:
+    cmd: python -m bankmlops.data.prepare
+    deps:
+    - path: data/raw/bank-additional-full.csv
+      hash: md5
+      md5: f6cb2c1256ffe2836b36df321f46e92c
+      size: 5834924
+    - path: src/bankmlops/data/prepare.py
+      hash: md5
+      md5: 76a2cb0577e284b1ec4f5f689bf23110
+      size: 3346
+    params:
+      params.yaml:
+        data.drop_columns:
+        - duration
+        data.processed_dir: data/processed
+        seed: 42
+        split.reference_ratio: 0.7
+        split.test_size: 0.2
+    outs:
+    - path: data/processed/production.parquet
+      hash: md5
+      md5: c23931974706f798f07ac6c5500e8b75
+      size: 67979
+    - path: data/processed/test.parquet
+      hash: md5
+      md5: cb466c44f57d92e8d7e67b85f5300620
+      size: 54259
+    - path: data/processed/train.parquet
+      hash: md5
+      md5: 356c1fa67a6268f2451d69d2020167fc
+      size: 180754
+  train:
+    cmd: python -m bankmlops.training.train
+    deps:
+    - path: data/processed/production.parquet
+      hash: md5
+      md5: c23931974706f798f07ac6c5500e8b75
+      size: 67979
+    - path: data/processed/test.parquet
+      hash: md5
+      md5: cb466c44f57d92e8d7e67b85f5300620
+      size: 54259
+    - path: data/processed/train.parquet
+      hash: md5
+      md5: 356c1fa67a6268f2451d69d2020167fc
+      size: 180754
+    - path: src/bankmlops/evaluation/metrics.py
+      hash: md5
+      md5: bf91215d48718e26364edccf166cdd82
+      size: 1139
+    - path: src/bankmlops/evaluation/plots.py
+      hash: md5
+      md5: 8aa9eed0fbfc5d3c0d01c5bc10e353a1
+      size: 2418
+    - path: src/bankmlops/features/build.py
+      hash: md5
+      md5: 7f6fbbadba8c76abc24fd56c209586a4
+      size: 1649
+    - path: src/bankmlops/training/train.py
+      hash: md5
+      md5: 77c6802c016cb55b50d536182ed39cd1
+      size: 9206
+    params:
+      params.yaml:
+        mlflow:
+          tracking_uri: sqlite:///mlflow.db
+          experiment_name: bank-marketing
+          registered_model_name: bank-marketing-classifier
+          champion_alias: champion
+        seed: 42
+        train:
+          decision_threshold: 0.5
+          selection_metric: pr_auc
+          models_enabled:
+          - logreg
+          - random_forest
+          model_path: models/model.joblib
+          metrics_path: reports/metrics.json
+          models:
+            logreg:
+              C: 1.0
+              max_iter: 1000
+              class_weight: balanced
+            random_forest:
+              n_estimators: 300
+              max_depth: 10
+              class_weight: balanced
+            xgboost:
+              n_estimators: 300
+              max_depth: 5
+              learning_rate: 0.1
+    outs:
+    - path: models/model.joblib
+      hash: md5
+      md5: de1b5881c4a1fb0db009c3a5968253ca
+      size: 13124994
+    - path: reports/metrics.json
+      hash: md5
+      md5: 156fcd5af3a71378d38868e043a39d2b
+      size: 1422
