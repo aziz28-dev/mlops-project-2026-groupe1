@@ -1,5 +1,7 @@
 # Plateforme MLOps — ciblage des campagnes de télémarketing bancaire
 
+[![CI](https://github.com/aziz28-dev/mlops-project-2026-groupeB/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/aziz28-dev/mlops-project-2026-groupeB/actions/workflows/ci.yml)
+
 Projet de fin de module **MLOps & Industrialisation de l'IA** (TEK-UP, 2026-2027), binôme.
 
 ## Contexte
