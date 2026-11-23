@@ -35,7 +35,7 @@ Pour la séance : phase 3 = « partielle (préparation minimale dans la baseline
 | — | SYNOPSIS.md complété (noms, emails) | A + B | En cours | SYNOPSIS.md | Compléter les noms, pousser sur GitHub |
 | 0 | Dépôt + environnement + pre-commit | A | Terminé | `poetry install` OK (Python 3.11.9) · `pre-commit run --all-files` tous hooks Passed · `pytest` 7 passed · PR #1 mergée (merge commit `9624335`, 22/11) | — |
 | 1 | Ingestion + validation + DVC | A | Terminé (PR #2, merge commit `52c7de3`, 22/11) | DVC 3.67.1 · `dvc repro` OK (41 188 lignes, 21 colonnes, 11,27 % de yes) · 2e `dvc repro` = stages sautés · `dvc status` « up to date » · `dvc push` : 2 fichiers vers remote local · 18 tests, couverture 84 % · ordre chronologique et note `duration` confirmés dans `bank-additional-names.txt` | A + B : trancher D1 (nécessaire avant la phase 8 / CML) |
-| 2 | EDA (version courte : 2 figures) | A | Non commencé | — | Lun. 23/11 soir |
+| 2 | EDA (version courte : 2 figures) | A | En attente de validation | `notebooks/01_eda.ipynb` exécuté de bout en bout · `reports/figures/target_imbalance.png` + `macro_drift_over_time.png` · référence → production : euribor3m 4,685 → 1,138 ; emp.var.rate 1,000 → −2,061 ; taux de yes 5,6 % → 24,6 % ; contact cellular 52,2 % → 89,9 % · 12 doublons, `pdays = 999` = 96,3 % | A : commits + PR, puis phase 4 baseline |
 | 3 | Préparation + split temporel | A | Non commencé | — | Minimal dans la phase 4 baseline ; version complète après le 24/11 |
 | 4 | Entraînement + MLflow (baseline LogReg + RF) | A | Non commencé | — | Lun. 23/11 soir ; XGBoost après le 24/11 |
 | 5 | CI lint + tests | B | Non commencé | — | Lun. 23/11 (dépend du dépôt GitHub + phase 0 poussée) |
