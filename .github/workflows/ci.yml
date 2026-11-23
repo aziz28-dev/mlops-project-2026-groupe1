@@ -1,0 +1,55 @@
+# Intégration continue : à chaque push sur main et à chaque Pull Request, une VM Ubuntu neuve
+# installe le projet avec Poetry, vérifie le style (ruff + black) puis lance pytest avec couverture.
+# Aucune donnée réelle ni `dvc pull` : les tests utilisent les fixtures factices de tests/conftest.py.
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch: # bouton « Run workflow » dans l'onglet Actions
+
+# Un nouveau push sur la même branche annule le run précédent, devenu obsolète.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+# Principe du moindre privilège : la CI lit le code, elle n'écrit rien dans le dépôt.
+permissions:
+  contents: read
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Récupérer le code
+        # Actions épinglées par SHA (immuable) plutôt que par tag (déplaçable) : protection supply chain.
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      # Poetry doit exister AVANT setup-python pour que `cache: poetry` puisse lire sa configuration.
+      # Même version qu'en local pour que poetry.lock soit interprété de la même façon.
+      - name: Installer Poetry
+        run: pipx install poetry==2.5.1
+
+      - name: Installer Python 3.11 (+ cache du .venv indexé sur poetry.lock)
+        id: setup-python
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.11"
+          cache: poetry
+
+      - name: Installer les dépendances
+        run: |
+          poetry env use "${{ steps.setup-python.outputs.python-path }}"
+          poetry install --no-interaction
+
+      - name: Lint (ruff)
+        run: poetry run ruff check .
+
+      - name: Format (black --check)
+        run: poetry run black --check .
+
+      - name: Tests + couverture (échec si < 75 %)
+        run: poetry run pytest --cov=src --cov-report=term-missing --cov-fail-under=75
