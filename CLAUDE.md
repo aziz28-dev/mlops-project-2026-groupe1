@@ -7,19 +7,58 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 Ce fichier est lu automatiquement par Claude Code au démarrage de chaque session.
 Il décrit le projet, le périmètre, les conventions et la manière dont Claude doit travailler avec nous.
 
-> **État du dépôt (à mettre à jour au fil des phases) :** phases 0, 1, 2 faites, phase 4 « baseline » faite,
-> phase 3 partielle. Poetry 2.x (`.venv` via `poetry.toml`), pre-commit (ruff-check + black). Pipeline DVC
-> `ingest → validate → prepare → train`. MLflow **3.18** écrit directement dans `sqlite:///mlflow.db`
-> (pas besoin de serveur ; UI via `mlflow ui --backend-store-uri sqlite:///mlflow.db`). Dans MLflow 3.x,
-> `log_model(name=...)` (pas `artifact_path`) et sérialisation skops : les arbres RandomForest exigent
-> `skops_trusted_types` (constante `SKOPS_TRUSTED_TYPES` dans `training/train.py`). Seuls `logreg` et
-> `random_forest` sont activés (`train.models_enabled`). DVC est en dépendance **dev**. Remote DVC provisoire
-> = local (`.dvc/config.local`, non versionné) en attendant D1. Les tests n'utilisent ni réseau ni vrai
-> dataset (`tests/conftest.py`), le test d'entraînement isole MLflow dans `tmp_path`. Ordre chronologique et note `duration` confirmés (README). Dépôt GitHub : `aziz28-dev/mlops-project-2026-groupeB` (renommé le 22/11, ancien nom `...-groupe1`). La section 5 décrit la
-> structure *cible* ; ne pas supposer qu'un fichier existe sans le vérifier. Avancement réel : `docs/PROGRESS.md`.
->
-> Poetry n'est pas forcément dans le PATH des terminaux déjà ouverts : sinon utiliser
-> `$env:APPDATA\Python\Scripts\poetry.exe`. Python 3.11 impose `numpy<2.5` et `xgboost<3.3` (décision D4).
+## 0. Point d'étape (mis à jour le 23/11/2026 au soir) — À LIRE EN PREMIER
+
+Dépôt GitHub : `aziz28-dev/mlops-project-2026-groupeB` (ancien nom `...-groupe1`, GitHub redirige).
+Séance de suivi notée : **mardi 24/11** (objectif : phases 0 → 5). Avancement détaillé + preuves :
+`docs/PROGRESS.md`. Guide d'installation pour le Membre B : `docs/GUIDE_BINOME.md`.
+
+| Phase | Qui | État |
+|---|---|---|
+| 0 Environnement (Poetry, pre-commit, structure) | A | ✅ PR #1 |
+| 1 Ingestion + validation + DVC | A | ✅ PR #2 |
+| 2 EDA courte (2 figures) | A | ✅ PR #4 |
+| 3 Préparation complète | A | ⚠️ partielle (minimal dans la baseline) ; reste : doublons, `pdays=999`, `unknown` |
+| 4 Baseline LogReg + RandomForest + MLflow | A | ✅ code fini, branche `feature/mlflow` (PR à merger) ; XGBoost plus tard |
+| **5 CI GitHub Actions** | **B** | **⏳ à faire en priorité** (branche `feature/ci`) |
+| 6 API FastAPI | B | ⏳ après la phase 5 |
+| 7 Docker · 8 Couverture + CML · 9 Drift · 10 Prefect · 11 Final | — | ⏳ prévu |
+
+**Ce qui existe dans le code :** `config.py` ; `data/ingest.py`, `data/validate.py`, `data/prepare.py` ;
+`features/build.py` (scaler + one-hot) ; `evaluation/metrics.py`, `evaluation/plots.py` ;
+`training/train.py` ; `notebooks/01_eda.ipynb`. Pipeline DVC : `ingest → validate → prepare → train`.
+33 tests, couverture 87 %, **sans réseau ni vrai dataset** (fixtures de `tests/conftest.py` ; le test
+d'entraînement isole MLflow dans `tmp_path`). `api/`, `inference/`, `monitoring/`, `pipelines/` sont vides.
+
+**Résultats réels (baseline, `reports/metrics.json`) :** champion = random_forest. Test (référence) :
+RF PR-AUC 0,164 / ROC-AUC 0,629 ; LogReg 0,163 / 0,610 (aléatoire ≈ 0,056). Production : ROC-AUC RF
+0,543, LogReg 0,633 → le drift dégrade le modèle. EDA : taux de yes 5,6 % (référence) → 24,6 %
+(production), euribor3m 4,69 → 1,14, contact cellular 52 % → 90 %.
+
+**Décisions :** D3 ✅ l'API charge `models/model.joblib`. D4 ✅ Python 3.11 avec `numpy<2.5`, `xgboost<3.3`.
+D1 ⏳ remote DVC partagé (DagsHub recommandé) : tant qu'il n'est pas choisi, `dvc pull` ne marche que sur
+le PC de A ; le Membre B obtient les données avec `poetry run dvc repro`. D2 : aliases MLflow (`@champion`).
+
+**Pièges techniques déjà réglés (ne pas les réintroduire) :**
+- MLflow **3.18** écrit dans `sqlite:///mlflow.db` (pas de serveur ; UI :
+  `poetry run mlflow ui --backend-store-uri sqlite:///mlflow.db --port 5000`). `log_model(name=...)`,
+  pas `artifact_path`. Sérialisation skops : `SKOPS_TRUSTED_TYPES` dans `training/train.py`.
+- DVC est en dépendance **dev** (pas dans l'image Docker). `dvc.lock` est exclu du hook trailing-whitespace.
+  Une sortie DVC ne doit jamais être ignorée par le `.gitignore` racine.
+- Les JSON générés sont écrits avec `newline="\n"` (identiques Windows / CI Linux).
+- Poetry peut manquer du PATH d'un terminal déjà ouvert : `$env:APPDATA\Python\Scripts\poetry.exe`.
+
+**Mission du Membre B (si c'est lui qui lit ceci) :**
+1. Installer : `git clone`, `poetry install`, `poetry run pre-commit install`, `poetry run pytest`
+   (33 passed attendu). Données si besoin : `poetry run dvc repro` (télécharge le zip UCI).
+2. Phase 5 : coller le prompt « Phase 5 » de `docs/ROADMAP_PROMPTS.md`. La CI fait `poetry install`,
+   ruff + `black --check`, `pytest --cov=src` ; **pas de `dvc pull`** (les tests n'en ont pas besoin).
+   Fini quand : CI verte sur une PR, badge dans le README, protection de `main`.
+3. Phase 6 : l'API charge `models/model.joblib` (un `Pipeline` sklearn complet : prétraitement + modèle,
+   `predict_proba(df)[:, 1]`). Entrée = **19 colonnes** (`feature_columns(["duration"])` dans
+   `features/build.py`) ; plusieurs noms contiennent un point (`emp.var.rate`, `cons.price.idx`,
+   `cons.conf.idx`, `nr.employed`) → alias Pydantic. Seuil : `train.decision_threshold`. Tant que D1
+   n'est pas tranché, tester l'API avec un petit modèle factice entraîné dans les tests.
 
 ---
 
